@@ -6,116 +6,430 @@
   {%- assign cuentas_tubulares = comps | where: "tipo", "cuenta tubular" -%}
   {%- assign extras = comps | where: "tipo", "extra" -%}
 
+  {%- assign uid = section.id | default: 'kc' -%}
+
+  <input type="hidden" name="properties[Charms]" id="kc-prop-charms">
+  <input type="hidden" name="properties[Extras]" id="kc-prop-extras">
+
   {%- if cuentas_redondas.size > 0 -%}
-    <h3>Cuentas redondas</h3>
+    <h3 class="kc-heading">Cuentas redondas</h3>
     <div class="kc-grid">
       {%- for c in cuentas_redondas -%}
-  {%- assign id = 'cr_' | append: forloop.index0 -%}
-  <label class="kc-card" for="{{ id }}">
-    <input
-      id="{{ id }}"
-      class="kc-input"
-      type="radio"
-      name="kc_cuenta_redonda"
-      value="{{ c.nombre | escape }}"
-      hidden
-    >
+        {%- assign id = uid | append: '_cr_' | append: forloop.index0 -%}
+        {%- assign v = c.variante_add_on.value -%}
+        {%- assign vid = v.id | default: '' -%}
+        {%- assign vprice = v.price | default: 0 -%}
 
-    {%- if c.imagen != blank -%}
-      <div class="kc-thumb">
-        {{ c.imagen | image_url: width: 140 | image_tag: loading: 'lazy', alt: c.nombre }}
-      </div>
-    {%- endif -%}
+        <label class="kc-card" for="{{ id }}">
+          <input
+            id="{{ id }}"
+            class="kc-input"
+            type="radio"
+            name="kc_cuenta_redonda"
+            value="{{ c.nombre | escape }}"
+            data-addon-variant-id="{{ vid }}"
+            data-price-cents="{{ vprice }}"
+            hidden
+          >
 
-    <div class="kc-title">{{ c.nombre }}</div>
-  </label>
-{%- endfor -%}
+          {%- if c.imagen != blank -%}
+            <div class="kc-thumb">
+              {{ c.imagen | image_url: width: 220 | image_tag: loading: 'lazy', alt: c.nombre }}
+            </div>
+          {%- endif -%}
 
+          <div class="kc-title">{{ c.nombre }}</div>
+
+          {%- if vprice > 0 -%}
+            <div class="kc-price">+ {{ vprice | money_without_trailing_zeros }}</div>
+          {%- else -%}
+            <div class="kc-price kc-price--included">Incluido</div>
+          {%- endif -%}
+        </label>
+      {%- endfor -%}
     </div>
   {%- endif -%}
 
   {%- if cuentas_tubulares.size > 0 -%}
-    <h3>Cuentas tubulares</h3>
+    <h3 class="kc-heading">Cuentas tubulares</h3>
     <div class="kc-grid">
       {%- for c in cuentas_tubulares -%}
-  {%- assign id = 'ct_' | append: forloop.index0 -%}
-  <label class="kc-card" for="{{ id }}">
-    <input
-      id="{{ id }}"
-      class="kc-input"
-      type="radio"
-      name="kc_cuenta_tubular"
-      value="{{ c.nombre | escape }}"
-      hidden
-    >
+        {%- assign id = uid | append: '_ct_' | append: forloop.index0 -%}
+        {%- assign v = c.variante_add_on.value -%}
+        {%- assign vid = v.id | default: '' -%}
+        {%- assign vprice = v.price | default: 0 -%}
 
-    {%- if c.imagen != blank -%}
-      <div class="kc-thumb">
-        {{ c.imagen | image_url: width: 140 | image_tag: loading: 'lazy', alt: c.nombre }}
-      </div>
-    {%- endif -%}
+        <label class="kc-card kc-card--tubular" for="{{ id }}">
+          <input
+            id="{{ id }}"
+            class="kc-input"
+            type="radio"
+            name="kc_cuenta_tubular"
+            value="{{ c.nombre | escape }}"
+            data-addon-variant-id="{{ vid }}"
+            data-price-cents="{{ vprice }}"
+            hidden
+          >
 
-    <div class="kc-title">{{ c.nombre }}</div>
-  </label>
-{%- endfor -%}
+          {%- if c.imagen != blank -%}
+            <div class="kc-thumb">
+              {{ c.imagen | image_url: width: 220 | image_tag: loading: 'lazy', alt: c.nombre }}
+            </div>
+          {%- endif -%}
 
+          <div class="kc-title">{{ c.nombre }}</div>
+
+          {%- if vprice > 0 -%}
+            <div class="kc-price">+ {{ vprice | money_without_trailing_zeros }}</div>
+          {%- else -%}
+            <div class="kc-price kc-price--included">Incluido</div>
+          {%- endif -%}
+        </label>
+      {%- endfor -%}
     </div>
   {%- endif -%}
 
   {%- if charms.size > 0 -%}
-    <h3>Charms</h3>
+    <h3 class="kc-heading">Charms</h3>
     <div class="kc-grid">
       {%- for c in charms -%}
-  {%- assign id = 'ch_' | append: forloop.index0 -%}
-  <label class="kc-card" for="{{ id }}">
- <input
-  id="{{ id }}"
-  class="kc-input"
-  type="checkbox"
-  name="kc_charms"
-  value="{{ c.nombre | escape }}"
-  hidden
->
+        {%- assign id = uid | append: '_ch_' | append: forloop.index0 -%}
+        {%- assign v = c.variante_add_on.value -%}
+        {%- assign vid = v.id | default: '' -%}
+        {%- assign vprice = v.price | default: 0 -%}
 
-    {%- if c.imagen != blank -%}
-      <div class="kc-thumb">
-        {{ c.imagen | image_url: width: 140 | image_tag: loading: 'lazy', alt: c.nombre }}
-      </div>
-    {%- endif -%}
+        <label class="kc-card" for="{{ id }}">
+          <input
+            id="{{ id }}"
+            class="kc-input"
+            type="checkbox"
+            name="kc_charms"
+            value="{{ c.nombre | escape }}"
+            data-addon-variant-id="{{ vid }}"
+            data-price-cents="{{ vprice }}"
+            hidden
+          >
 
-    <div class="kc-title">{{ c.nombre }}</div>
-  </label>
-{%- endfor -%}
+          {%- if c.imagen != blank -%}
+            <div class="kc-thumb">
+              {{ c.imagen | image_url: width: 220 | image_tag: loading: 'lazy', alt: c.nombre }}
+            </div>
+          {%- endif -%}
 
+          <div class="kc-title">{{ c.nombre }}</div>
+
+          {%- if vprice > 0 -%}
+            <div class="kc-price">+ {{ vprice | money_without_trailing_zeros }}</div>
+          {%- else -%}
+            <div class="kc-price kc-price--included">Incluido</div>
+          {%- endif -%}
+        </label>
+      {%- endfor -%}
     </div>
   {%- endif -%}
 
   {%- if extras.size > 0 -%}
-    <h3>Extras</h3>
+    <h3 class="kc-heading">Extras</h3>
     <div class="kc-grid">
-     {%- for c in extras -%}
-  {%- assign id = 'ex_' | append: forloop.index0 -%}
-  <label class="kc-card" for="{{ id }}">
-   <input
-  id="{{ id }}"
-  class="kc-input"
-  type="checkbox"
-  name="kc_extras"
-  value="{{ c.nombre | escape }}"
-  hidden
->
-    {%- if c.imagen != blank -%}
-      <div class="kc-thumb">
-        {{ c.imagen | image_url: width: 140 | image_tag: loading: 'lazy', alt: c.nombre }}
-      </div>
-    {%- endif -%}
-    <div class="kc-title">{{ c.nombre }}</div>
-  </label>
-{%- endfor -%}
+      {%- for c in extras -%}
+        {%- assign id = uid | append: '_ex_' | append: forloop.index0 -%}
+        {%- assign v = c.variante_add_on.value -%}
+        {%- assign vid = v.id | default: '' -%}
+        {%- assign vprice = v.price | default: 0 -%}
 
+        <label class="kc-card" for="{{ id }}">
+          <input
+            id="{{ id }}"
+            class="kc-input"
+            type="checkbox"
+            name="kc_extras"
+            value="{{ c.nombre | escape }}"
+            data-addon-variant-id="{{ vid }}"
+            data-price-cents="{{ vprice }}"
+            hidden
+          >
+
+          {%- if c.imagen != blank -%}
+            <div class="kc-thumb">
+              {{ c.imagen | image_url: width: 220 | image_tag: loading: 'lazy', alt: c.nombre }}
+            </div>
+          {%- endif -%}
+
+          <div class="kc-title">{{ c.nombre }}</div>
+
+          {%- if vprice > 0 -%}
+            <div class="kc-price">+ {{ vprice | money_without_trailing_zeros }}</div>
+          {%- else -%}
+            <div class="kc-price kc-price--included">Incluido</div>
+          {%- endif -%}
+        </label>
+      {%- endfor -%}
     </div>
   {%- endif -%}
 
-{%- else -%}
-  <p>No hay componentes asignados a este producto.</p>
+  {%- assign base_price_cents = product.selected_or_first_available_variant.price -%}
+  <div class="kc-total" data-base-price-cents="{{ base_price_cents }}">
+    <span class="kc-total-label">Total</span>
+    <span class="kc-total-value" id="kc-total-value">{{ base_price_cents | money }}</span>
+  </div>
+
 {%- endif -%}
+
+<style>
+  :root{
+    --kc-coal: #2A2A2A;
+  }
+
+  .kc-heading{
+    margin: 18px 0 10px;
+    font-size: 18px;
+    color: var(--kc-coal);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+  }
+  @media (max-width: 749px){
+    .kc-heading{
+      font-size: 19px;
+      margin-top: 22px;
+    }
+  }
+
+  .kc-grid{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  @media (min-width: 750px){
+    .kc-grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  .kc-card{
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid rgba(0,0,0,.12);
+    border-radius: 12px;
+    padding: 10px;
+    background: #fff;
+    text-align: left;
+    display: grid;
+    gap: 8px;
+  }
+
+  .kc-thumb{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .kc-thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display:block;
+  }
+
+  .kc-title{
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    min-height: 2.4em;
+    word-break: break-word;
+    color: var(--kc-coal);
+  }
+
+  .kc-price{
+    font-size: 12px;
+    font-weight: 700;
+    opacity: .88;
+    color: var(--kc-coal);
+  }
+  .kc-price--included{
+    opacity: .55;
+    font-weight: 600;
+  }
+
+  .kc-card:has(.kc-input:checked){
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .kc-total{
+    margin: 24px 0 18px;
+    padding: 18px 22px;
+    border-radius: 14px;
+    background: #3A2A2A;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(0,0,0,.08);
+  }
+  .kc-total-label{
+    opacity: .85;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .kc-total-value{
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: .2px;
+  }
+</style>
+
+<script>
+(function () {
+  function formatCLPFromCents(cents){
+    return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(cents / 100);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const totalWrap = document.querySelector('.kc-total');
+    const totalEl = document.querySelector('#kc-total-value');
+    const form = document.querySelector('form[data-type="add-to-cart-form"]');
+    if (!form || !totalWrap || !totalEl) return;
+
+    const propCharms = form.querySelector('#kc-prop-charms');
+    const propExtras = form.querySelector('#kc-prop-extras');
+
+    function selectedInputs(){
+      const charms = Array.from(form.querySelectorAll('input[name="kc_charms"]:checked'));
+      const extras = Array.from(form.querySelectorAll('input[name="kc_extras"]:checked'));
+      const cuentaRed = form.querySelector('input[name="kc_cuenta_redonda"]:checked');
+      const cuentaTub = form.querySelector('input[name="kc_cuenta_tubular"]:checked');
+      return { charms, extras, cuentaRed, cuentaTub };
+    }
+
+    function updateProps(){
+      const { charms, extras } = selectedInputs();
+      if (propCharms) propCharms.value = charms.map(i => i.value.trim()).filter(Boolean).join(', ');
+      if (propExtras) propExtras.value = extras.map(i => i.value.trim()).filter(Boolean).join(', ');
+    }
+
+    function getExtrasCents(){
+      const { charms, extras, cuentaRed, cuentaTub } = selectedInputs();
+      const all = [...charms, ...extras];
+      if (cuentaRed) all.push(cuentaRed);
+      if (cuentaTub) all.push(cuentaTub);
+
+      let extraCents = 0;
+      all.forEach(i => {
+        const cents = Number(i.dataset.priceCents || 0);
+        extraCents += cents;
+      });
+      return extraCents;
+    }
+
+    function updateTotal(){
+      const baseCents = Number(totalWrap.dataset.basePriceCents || 0);
+      totalEl.textContent = formatCLPFromCents(baseCents + getExtrasCents());
+    }
+
+    // ✅ Tubulares: radio "toggle" (marca normal / clic otra vez = desmarca)
+    let kcTubularWasChecked = false;
+
+    form.addEventListener('pointerdown', (e) => {
+      const card = e.target.closest('.kc-card--tubular');
+      if (!card) return;
+      const tubular = card.querySelector('input[name="kc_cuenta_tubular"][type="radio"]');
+      if (!tubular) return;
+      kcTubularWasChecked = tubular.checked;
+    }, true);
+
+    form.addEventListener('click', (e) => {
+      const card = e.target.closest('.kc-card--tubular');
+      if (!card) return;
+      const tubular = card.querySelector('input[name="kc_cuenta_tubular"][type="radio"]');
+      if (!tubular) return;
+
+      // Si ya estaba marcado ANTES del click -> desmarcar
+      if (kcTubularWasChecked) {
+        e.preventDefault();
+        tubular.checked = false;
+        kcTubularWasChecked = false;
+        updateProps();
+        updateTotal();
+      }
+    }, false);
+
+    async function addBundleToCart(){
+      updateProps();
+      updateTotal();
+
+      const baseVariantId = Number(form.querySelector('input[name="id"]')?.value || 0);
+      if (!baseVariantId) { form.submit(); return; }
+
+      const bundleId = 'kc_' + Date.now();
+
+      const cuentaRedVal = form.querySelector('input[name="kc_cuenta_redonda"]:checked')?.value || '';
+      const cuentaTubVal = form.querySelector('input[name="kc_cuenta_tubular"]:checked')?.value || '';
+
+      const baseProperties = {
+        _bundle_id: bundleId,
+        ...(cuentaRedVal ? { 'Cuenta redonda': cuentaRedVal } : {}),
+        ...(cuentaTubVal ? { 'Cuenta tubular': cuentaTubVal } : {}),
+        ...(propCharms?.value ? { 'Charms': propCharms.value } : {}),
+        ...(propExtras?.value ? { 'Extras': propExtras.value } : {})
+      };
+
+      const { charms, extras, cuentaRed, cuentaTub } = selectedInputs();
+      const addOnInputs = [...charms, ...extras, cuentaRed, cuentaTub].filter(Boolean);
+
+      const items = [{
+        id: baseVariantId,
+        quantity: 1,
+        properties: baseProperties
+      }];
+
+      addOnInputs.forEach(i => {
+        const addId = Number(i.dataset.addonVariantId || 0);
+        if (!addId) return;
+        items.push({ id: addId, quantity: 1, properties: { _bundle_id: bundleId } });
+      });
+
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+
+      const txt = await res.text();
+      if (!res.ok) {
+        console.error('KC /cart/add.js error:', txt);
+        throw new Error('No se pudo agregar al carrito');
+      }
+
+      window.location.href = '/cart';
+    }
+
+    form.addEventListener('change', (e) => {
+      const n = e.target?.name;
+      if (n === 'kc_charms' || n === 'kc_extras' || n === 'kc_cuenta_redonda' || n === 'kc_cuenta_tubular') {
+        updateProps();
+        updateTotal();
+      }
+    });
+
+    const addBtn = form.querySelector('button[name="add"]');
+    if (addBtn) {
+      addBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        try { await addBundleToCart(); }
+        catch (err) { console.error(err); form.submit(); }
+      }, true);
+    }
+
+    form.addEventListener('submit', (e) => {
+      const active = document.activeElement;
+      if (active && active.name !== 'add') return;
+      e.preventDefault();
+      addBundleToCart().catch(() => form.submit());
+    }, true);
+
+    updateProps();
+    updateTotal();
+  });
+})();
+</script>
