@@ -1,0 +1,121 @@
+{%- assign comps = product.metafields.custom.componentes_personalizados.value -%}
+
+{%- if comps != blank -%}
+  {%- assign charms = comps | where: "tipo", "charm" -%}
+  {%- assign cuentas_redondas = comps | where: "tipo", "cuenta redonda" -%}
+  {%- assign cuentas_tubulares = comps | where: "tipo", "cuenta tubular" -%}
+  {%- assign extras = comps | where: "tipo", "extra" -%}
+
+  {%- if cuentas_redondas.size > 0 -%}
+    <h3>Cuentas redondas</h3>
+    <div class="kc-grid">
+      {%- for c in cuentas_redondas -%}
+  {%- assign id = 'cr_' | append: forloop.index0 -%}
+  <label class="kc-card" for="{{ id }}">
+    <input
+      id="{{ id }}"
+      class="kc-input"
+      type="radio"
+      name="kc_cuenta_redonda"
+      value="{{ c.nombre | escape }}"
+      hidden
+    >
+
+    {%- if c.imagen != blank -%}
+      <div class="kc-thumb">
+        {{ c.imagen | image_url: width: 140 | image_tag: loading: 'lazy', alt: c.nombre }}
+      </div>
+    {%- endif -%}
+
+    <div class="kc-title">{{ c.nombre }}</div>
+  </label>
+{%- endfor -%}
+
+    </div>
+  {%- endif -%}
+
+  {%- if cuentas_tubulares.size > 0 -%}
+    <h3>Cuentas tubulares</h3>
+    <div class="kc-grid">
+      {%- for c in cuentas_tubulares -%}
+  {%- assign id = 'ct_' | append: forloop.index0 -%}
+  <label class="kc-card" for="{{ id }}">
+    <input
+      id="{{ id }}"
+      class="kc-input"
+      type="radio"
+      name="kc_cuenta_tubular"
+      value="{{ c.nombre | escape }}"
+      hidden
+    >
+
+    {%- if c.imagen != blank -%}
+      <div class="kc-thumb">
+        {{ c.imagen | image_url: width: 140 | image_tag: loading: 'lazy', alt: c.nombre }}
+      </div>
+    {%- endif -%}
+
+    <div class="kc-title">{{ c.nombre }}</div>
+  </label>
+{%- endfor -%}
+
+    </div>
+  {%- endif -%}
+
+  {%- if charms.size > 0 -%}
+    <h3>Charms</h3>
+    <div class="kc-grid">
+      {%- for c in charms -%}
+  {%- assign id = 'ch_' | append: forloop.index0 -%}
+  <label class="kc-card" for="{{ id }}">
+ <input
+  id="{{ id }}"
+  class="kc-input"
+  type="checkbox"
+  name="kc_charms"
+  value="{{ c.nombre | escape }}"
+  hidden
+>
+
+    {%- if c.imagen != blank -%}
+      <div class="kc-thumb">
+        {{ c.imagen | image_url: width: 140 | image_tag: loading: 'lazy', alt: c.nombre }}
+      </div>
+    {%- endif -%}
+
+    <div class="kc-title">{{ c.nombre }}</div>
+  </label>
+{%- endfor -%}
+
+    </div>
+  {%- endif -%}
+
+  {%- if extras.size > 0 -%}
+    <h3>Extras</h3>
+    <div class="kc-grid">
+     {%- for c in extras -%}
+  {%- assign id = 'ex_' | append: forloop.index0 -%}
+  <label class="kc-card" for="{{ id }}">
+   <input
+  id="{{ id }}"
+  class="kc-input"
+  type="checkbox"
+  name="kc_extras"
+  value="{{ c.nombre | escape }}"
+  hidden
+>
+    {%- if c.imagen != blank -%}
+      <div class="kc-thumb">
+        {{ c.imagen | image_url: width: 140 | image_tag: loading: 'lazy', alt: c.nombre }}
+      </div>
+    {%- endif -%}
+    <div class="kc-title">{{ c.nombre }}</div>
+  </label>
+{%- endfor -%}
+
+    </div>
+  {%- endif -%}
+
+{%- else -%}
+  <p>No hay componentes asignados a este producto.</p>
+{%- endif -%}
